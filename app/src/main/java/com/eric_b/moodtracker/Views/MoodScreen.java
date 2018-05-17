@@ -11,6 +11,7 @@ import com.eric_b.moodtracker.R;
 
 public class MoodScreen extends MainActivity {
 
+    public static final String BUNDLE_CURRENT_MOOD ="MOOD";
 
     private int[] bkground = {R.color.faded_red,R.color.warm_grey,R.color.cornflower_blue_65,R.color.light_sage,R.color.banana_yellow};
     private int[] smeily = {R.drawable.smiley_sad,R.drawable.smiley_disappointed,R.drawable.smiley_normal,R.drawable.smiley_happy,R.drawable.smiley_super_happy};
