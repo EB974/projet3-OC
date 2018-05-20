@@ -2,31 +2,50 @@ package com.eric_b.moodtracker.Controllers;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
-import com.eric_b.moodtracker.Views.MoodScreen;
+import com.eric_b.moodtracker.Modeles.MoodObject;
 import com.eric_b.moodtracker.R;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity{
 
+
+    // declaration of mood variables
+    public static final String DATE_CURRENT_MOOD = "DATE_CURRENT_MOOD";
+    public static final String MOOD_CURRENT_MOOD = "MOOD_CURRENT_MOOD";
+    public static final String NOTE_CURRENT_MOOD = "NOTE_CURRENT_MOOD";
+    public static final String DATE_MEM_MOOD = "DATE_MEM_MOOD";
+    public static final String MOOD_MEM_MOOD = "MOOD_MEM_MOOD";
+    public static final String NOTE_MEM_MOOD = "NOTE_MEM_MOOD";
+
     public static final String BUNDLE_CURRENT_MOOD = "MOOD";
     int mood;
+    String dayNote;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ImageButton noteButton = (ImageButton) findViewById(R.id.buttonAddNote);
+
+
+
+        ImageButton noteButton = findViewById(R.id.buttonAddNote);
+        ImageButton historyButton = findViewById(R.id.buttonHistory);
+
 
         if (savedInstanceState != null) {
             mood = savedInstanceState.getInt(BUNDLE_CURRENT_MOOD);
@@ -36,7 +55,7 @@ public class MainActivity extends AppCompatActivity{
         MoodChange(mood);
 
         final View currentView;
-        currentView = (View) findViewById(R.id.moodScreen);
+        currentView = findViewById(R.id.moodScreen);
 
         currentView.setOnTouchListener(
                 new View.OnTouchListener() {
@@ -51,6 +70,7 @@ public class MainActivity extends AppCompatActivity{
                                 return true;
 
                             case (MotionEvent.ACTION_UP):
+                                myView.performClick();
                                 Y2 = (int) event.getY();
                                 deltaY = Y1 - Y2;
                                 if (deltaY > 50) {
@@ -80,14 +100,22 @@ public class MainActivity extends AppCompatActivity{
                 note();
             }
         });
+        historyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent historyActivity = new Intent(MainActivity.this, HistoryActivity.class);
+                startActivity(historyActivity);
+            }
+        });
     }
 
         private void MoodChange ( int screen){
             RelativeLayout layout = findViewById(R.id.moodScreen);
-            MoodScreen image = new MoodScreen();
-            ImageView moodImage = (ImageView) findViewById(R.id.moodImage);
-            image.SetImage(screen, moodImage);
-            image.SetBkground(screen, layout);
+            MoodObject image = new MoodObject();
+            ImageView moodImage = findViewById(R.id.moodImage);
+            image.SetScreen(screen);
+            moodImage.setImageResource(image.GetImage());
+            layout.setBackgroundResource(image.GetBkground());
             mood = screen;
         }
 
@@ -101,32 +129,78 @@ public class MainActivity extends AppCompatActivity{
             LayoutInflater factory = LayoutInflater.from(this);
             final View alertDialogView = factory.inflate(R.layout.dialog_box, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            LayoutInflater inflater = getLayoutInflater();
             builder.setView(alertDialogView);
-
             builder.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            System.out.println("Annuler");
-                            //finish();
                         }
                     })
                     .setPositiveButton("VALIDER", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            EditText txt = (EditText)alertDialogView.findViewById(R.id.EditTextnote);
-                            String chaine = txt.getText().toString();
-                            System.out.println("Valider");
-                            System.out.println(chaine);
-                            //Intent intent = new Intent();
-                            //intent.putExtra(BUNDLE_EXTRA_SCORE, mScore);
-                            //setResult(RESULT_OK, intent);
-                            //mPreferences.edit().putInt(PREF_KEY_SCORE, mScore).commit();
-                            //finish();
+                            EditText txt = alertDialogView.findViewById(R.id.EditTextnote);
+                            dayNote = txt.getText().toString();
+                            recMood();
                         }
                     })
                     .create()
                     .show();
+        }
+
+        private void recMood(){
+            SharedPreferences daylyMoodPref = getPreferences(MODE_PRIVATE);
+            SharedPreferences moodPref = getPreferences(MODE_PRIVATE);
+            Calendar now = Calendar.getInstance();
+            Calendar moodDate = Calendar.getInstance();
+            ArrayList<Long> dateRec = new ArrayList<>();
+            ArrayList<Integer> moodRec = new ArrayList<>();
+            ArrayList<String> noteRec = new ArrayList<>();
+            Gson dateGson = new Gson();
+            Gson moodGson = new Gson();
+            Gson noteGson = new Gson();
+            String getDateGson,getMoodGson,getNoteGson;
+
+            if (daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0) != 0) {
+                 moodDate.setTimeInMillis(daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0));
+            }
+
+            if (moodPref.getString(DATE_MEM_MOOD, null) != null) {
+                getDateGson = moodPref.getString(DATE_MEM_MOOD, null);
+                getMoodGson = moodPref.getString(MOOD_MEM_MOOD, null);
+                getNoteGson = moodPref.getString(NOTE_MEM_MOOD, null);
+
+                dateRec = dateGson.fromJson(getDateGson, new ArrayList<Long>().getClass());
+                moodRec = moodGson.fromJson(getMoodGson,  new ArrayList<Integer>().getClass());
+                noteRec = noteGson.fromJson(getNoteGson, new ArrayList<String>().getClass());
+            }
+
+            if (now.get(Calendar.DATE)-moodDate.get(Calendar.DATE)==0){
+                daylyMoodPref.edit().putLong(DATE_CURRENT_MOOD,now.getTime().getTime()).apply();
+                daylyMoodPref.edit().putInt(MOOD_CURRENT_MOOD,mood).apply();
+                daylyMoodPref.edit().putString(NOTE_CURRENT_MOOD,dayNote).apply();
+            }
+            else{
+               if (dateRec != null) {
+                   dateRec.add(daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0));
+               }
+               if (moodRec != null) {
+                   moodRec.add(daylyMoodPref.getInt(MOOD_CURRENT_MOOD, 0));
+               }
+               if (noteRec != null) {
+                    noteRec.add(daylyMoodPref.getString(NOTE_CURRENT_MOOD, null));
+                }
+                moodPref.edit().putString(DATE_MEM_MOOD,dateGson.toJson(dateRec)).apply();
+                moodPref.edit().putString(MOOD_MEM_MOOD,moodGson.toJson(moodRec)).apply();
+                moodPref.edit().putString(NOTE_MEM_MOOD,noteGson.toJson(noteRec)).apply();
+            }
+
+            System.out.println("comparaison :"+(moodDate.get(Calendar.DATE)-now.get(Calendar.DATE)));
+            System.out.println("moodDate :"+moodDate.get(Calendar.DATE));
+            System.out.println("now :"+now.get(Calendar.DATE));
+            System.out.println("humeur : " + mood);
+            System.out.println("note : " + dayNote);
+
+
         }
 
 
