@@ -46,14 +46,27 @@ public class HistoryActivity extends AppCompatActivity{
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int widthScreen = metrics.widthPixels;
+
+        int orientation = getResources().getConfiguration().orientation;
+        int sizeScreen,coef;
+        if (orientation==1) {
+            sizeScreen= metrics.widthPixels;
+            coef = 25;
+        }
+        else  {
+            sizeScreen = metrics.widthPixels;
+            coef = 20;
+        }
+
+
+
         int min;
         recoverMemMood();
         int sizeListMood = dateRec.size()-1;
-        if (sizeListMood-7 >=0){
-            min = sizeListMood-7;
+        if (sizeListMood-6 >=0){
+            min = sizeListMood-6;
         }else{
-            min = sizeListMood;
+            min = 0;
         }
         int [] txtViewName = {R.id.day1Text,R.id.day2Text,R.id.day3Text,R.id.day4Text,R.id.day5Text,R.id.day6Text,R.id.day7Text};
         int [] buttonViewName = {R.id.day1ImageButton,R.id.day2ImageButton,R.id.day3ImageButton,R.id.day4ImageButton,R.id.day5ImageButton,R.id.day6ImageButton,R.id.day7ImageButton};
@@ -61,7 +74,7 @@ public class HistoryActivity extends AppCompatActivity{
         Calendar dateDay =  Calendar.getInstance();
         Calendar dateMem =  Calendar.getInstance();
         int viewPosition = 0;
-        for(int i=min; i >=0 ; i--){
+        for(int i=min; i <=sizeListMood ; i++){
             dateMem.setTimeInMillis(dateRec.get(i));
             int diffDate = dateDay.get(Calendar.DATE)-dateMem.get(Calendar.DATE);
             String txt;
@@ -78,18 +91,72 @@ public class HistoryActivity extends AppCompatActivity{
 
             TextView currentTxtView = findViewById(txtViewName[viewPosition]);
             currentTxtView.setText(txt);
-            currentTxtView.setWidth(Math.round(widthScreen/100*25*(moodRec.get(i)+1)));
+            currentTxtView.setWidth(Math.round(sizeScreen/100*coef*(moodRec.get(i)+1)));
             bckColor.SetScreen(moodRec.get(i));
             currentTxtView.setBackgroundResource(bckColor.GetBkground());
 
             if (noteRec.get(i).length()>0){
-                currentButton = findViewById(buttonViewName[i]);
+                currentButton = findViewById(buttonViewName[viewPosition]);
                 currentButton.setVisibility(View.VISIBLE);
             }
             viewPosition++;
 
         }
-        
+        noteButton1Day.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context cont = v.getContext();
+                Toast.makeText(cont, noteRec.get(noteRec.size()-7), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        noteButton2Day.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context cont = v.getContext();
+                Toast.makeText(cont, noteRec.get(noteRec.size()-6), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        noteButton3Day.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context cont = v.getContext();
+                Toast.makeText(cont, noteRec.get(noteRec.size()-5), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        noteButton4Day.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context cont = v.getContext();
+                Toast.makeText(cont, noteRec.get(noteRec.size()-4), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        noteButton5Day.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context cont = v.getContext();
+                Toast.makeText(cont, noteRec.get(noteRec.size()-3), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        noteButton6Day.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context cont = v.getContext();
+                Toast.makeText(cont, noteRec.get(noteRec.size()-2), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        noteButton7Day.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context cont = v.getContext();
+                Toast.makeText(cont, noteRec.get(noteRec.size()-1), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void recoverMemMood(){

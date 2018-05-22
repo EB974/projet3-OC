@@ -10,13 +10,14 @@
     android:id="@+id/histroryScreen">
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:id="@+id/day1Layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         tools:ignore="UselessParent">
         <TextView
-            android:id="@+id/day7Text"
-            android:layout_width="wrap_content"
+            android:id="@+id/day1Text"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingStart="7dp"
             android:paddingEnd="7dp"
@@ -25,7 +26,7 @@
             android:textStyle="bold"
             />
         <ImageButton
-            android:id="@+id/day7ImageButton"
+            android:id="@+id/day1ImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="Note Button"
@@ -37,121 +38,14 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:ignore="UselessParent">
-        <TextView
-            android:id="@+id/day6Text"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingStart="7dp"
-            android:paddingEnd="7dp"
-            android:paddingLeft="7dp"
-            android:paddingTop="5dp"
-            android:textStyle="bold"
-            />
-        <ImageButton
-            android:id="@+id/day6ImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="Note Button"
-            android:background="@drawable/ic_comment_black_48px"
-            android:layout_marginEnd="7dp"
-            android:layout_marginRight="7dp"
-            android:layout_gravity="end|center_vertical"
-            android:visibility="invisible"/>
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:ignore="UselessParent">
-        <TextView
-            android:id="@+id/day5Text"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingStart="7dp"
-            android:paddingEnd="7dp"
-            android:paddingLeft="7dp"
-            android:paddingTop="5dp"
-            android:textStyle="bold"
-            />
-        <ImageButton
-            android:id="@+id/day5ImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="Note Button"
-            android:background="@drawable/ic_comment_black_48px"
-            android:layout_marginEnd="7dp"
-            android:layout_marginRight="7dp"
-            android:layout_gravity="end|center_vertical"
-            android:visibility="invisible"/>
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:ignore="UselessParent">
-        <TextView
-            android:id="@+id/day4Text"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingStart="7dp"
-            android:paddingEnd="7dp"
-            android:paddingLeft="7dp"
-            android:paddingTop="5dp"
-            android:textStyle="bold"
-            />
-        <ImageButton
-            android:id="@+id/day4ImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="Note Button"
-            android:background="@drawable/ic_comment_black_48px"
-            android:layout_marginEnd="7dp"
-            android:layout_marginRight="7dp"
-            android:layout_gravity="end|center_vertical"
-            android:visibility="invisible"/>
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:ignore="UselessParent">
-        <TextView
-            android:id="@+id/day3Text"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingStart="7dp"
-            android:paddingEnd="7dp"
-            android:paddingLeft="7dp"
-            android:paddingTop="5dp"
-            android:textStyle="bold"
-            />
-        <ImageButton
-            android:id="@+id/day3ImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="Note Button"
-            android:background="@drawable/ic_comment_black_48px"
-            android:layout_marginEnd="7dp"
-            android:layout_marginRight="7dp"
-            android:layout_gravity="end|center_vertical"
-            android:visibility="invisible"/>
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:id="@+id/day2Layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         tools:ignore="UselessParent">
         <TextView
             android:id="@+id/day2Text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingStart="7dp"
             android:paddingEnd="7dp"
@@ -172,13 +66,14 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:id="@+id/day3Layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         tools:ignore="UselessParent">
         <TextView
-            android:id="@+id/day1Text"
-            android:layout_width="wrap_content"
+            android:id="@+id/day3Text"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingStart="7dp"
             android:paddingEnd="7dp"
@@ -187,7 +82,119 @@
             android:textStyle="bold"
             />
         <ImageButton
-            android:id="@+id/day1ImageButton"
+            android:id="@+id/day3ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Note Button"
+            android:background="@drawable/ic_comment_black_48px"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_gravity="end|center_vertical"
+            android:visibility="invisible"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/day4Layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:ignore="UselessParent">
+        <TextView
+            android:id="@+id/day4Text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="7dp"
+            android:paddingEnd="7dp"
+            android:paddingLeft="7dp"
+            android:paddingTop="5dp"
+            android:textStyle="bold"
+            />
+        <ImageButton
+            android:id="@+id/day4ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Note Button"
+            android:background="@drawable/ic_comment_black_48px"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_gravity="end|center_vertical"
+            android:visibility="invisible"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/day5Layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:ignore="UselessParent">
+        <TextView
+            android:id="@+id/day5Text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="7dp"
+            android:paddingEnd="7dp"
+            android:paddingLeft="7dp"
+            android:paddingTop="5dp"
+            android:textStyle="bold"
+            />
+        <ImageButton
+            android:id="@+id/day5ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Note Button"
+            android:background="@drawable/ic_comment_black_48px"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_gravity="end|center_vertical"
+            android:visibility="invisible"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/day6Layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:ignore="UselessParent">
+        <TextView
+            android:id="@+id/day6Text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="7dp"
+            android:paddingEnd="7dp"
+            android:paddingLeft="7dp"
+            android:paddingTop="5dp"
+            android:textStyle="bold"
+            />
+        <ImageButton
+            android:id="@+id/day6ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Note Button"
+            android:background="@drawable/ic_comment_black_48px"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_gravity="end|center_vertical"
+            android:visibility="invisible"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/day7Layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:ignore="UselessParent">
+        <TextView
+            android:id="@+id/day7Text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="7dp"
+            android:paddingEnd="7dp"
+            android:paddingLeft="7dp"
+            android:paddingTop="5dp"
+            android:textStyle="bold"
+            />
+        <ImageButton
+            android:id="@+id/day7ImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="Note Button"

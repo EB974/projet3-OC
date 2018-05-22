@@ -19,7 +19,7 @@ import com.eric_b.moodtracker.R;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.text.DateFormat;
+
 
 public class MainActivity extends AppCompatActivity{
 
@@ -45,12 +45,13 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         ImageButton noteButton = findViewById(R.id.buttonAddNote);
         ImageButton historyButton = findViewById(R.id.buttonHistory);
+
         daylyMoodPref = getPreferences(MODE_PRIVATE);
         moodPref = getSharedPreferences(PREF_MEM_MOOD, MODE_PRIVATE);
         if (savedInstanceState != null) {
             mood = savedInstanceState.getInt(BUNDLE_CURRENT_MOOD);
         } else {
-            mood = 2;
+            LoadRecordedMood();
         }
         MoodChange(mood);
 
@@ -108,7 +109,16 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-        private void MoodChange ( int screen){
+    /**
+     * Dispatch onPause() to fragments.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        daylyRecordMood();
+    }
+
+    private void MoodChange (int screen){
             RelativeLayout layout = findViewById(R.id.moodScreen);
             MoodObject image = new MoodObject();
             ImageView moodImage = findViewById(R.id.moodImage);
@@ -125,36 +135,60 @@ public class MainActivity extends AppCompatActivity{
         }
 
         private void note () {
-            LayoutInflater factory = LayoutInflater.from(this);
             ViewGroup viewG = new ViewGroup(this) {
                 @Override
-                protected void onLayout(boolean changed, int l, int t, int r, int b) {
-
+                protected void onLayout(boolean unchanged, int l, int t, int r, int b) {
                 }
             };
-            final View alertDialogView = factory.inflate(R.layout.dialog_box, viewG);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setView(alertDialogView);
-            builder.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
+            final View boxView = LayoutInflater.from(this).inflate(R.layout.dialog_box, viewG, false);
+            final AlertDialog.Builder box = new AlertDialog.Builder(this);
+            box.setView(boxView);
+            box.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     })
-                    .setPositiveButton("VALIDER", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            EditText txt = alertDialogView.findViewById(R.id.EditTextnote);
-                            dayNote = txt.getText().toString();
-                            System.out.println("dayNote "+dayNote);
-                            recMood();
-                        }
-                    })
-                    .create()
-                    .show();
+                .setPositiveButton("VALIDER", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EditText inputNote = boxView.findViewById(R.id.EditTextnote);
+                        dayNote = inputNote.getText().toString();
+                        recordMood();
+                    }
+                })
+                .create()
+                .show();
         }
 
-        private void recMood(){
-            remplir();
+    private void recoverMood(){
+
+
+    }
+
+    private void LoadRecordedMood(){
+        Calendar now = Calendar.getInstance();
+        Calendar moodDate = Calendar.getInstance();
+        if (daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0) != 0) {
+            moodDate.setTimeInMillis(daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0));
+        }
+        if (now.get(Calendar.DATE)-moodDate.get(Calendar.DATE)==0) {
+            mood = daylyMoodPref.getInt(MOOD_CURRENT_MOOD, 0);
+        }else{
+            mood = 3;
+        }
+    }
+
+
+    private void daylyRecordMood(){
+        Calendar now = Calendar.getInstance();
+            daylyMoodPref.edit().putLong(DATE_CURRENT_MOOD, now.getTime().getTime()).apply();
+            daylyMoodPref.edit().putInt(MOOD_CURRENT_MOOD, mood).apply();
+            daylyMoodPref.edit().putString(NOTE_CURRENT_MOOD, dayNote).apply();
+
+    }
+
+        private void recordMood(){
+            //remplir();
             Calendar now = Calendar.getInstance();
             Calendar moodDate = Calendar.getInstance();
             ArrayList<Long> dateRec = new ArrayList<>();
@@ -166,7 +200,6 @@ public class MainActivity extends AppCompatActivity{
 
             if (daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0) != 0) {
                 moodDate.setTimeInMillis(daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0));
-                System.out.println("moodDate "+ moodDate.getTime());
             }
 
             // Recover Arraylist of Mood memory
@@ -174,15 +207,11 @@ public class MainActivity extends AppCompatActivity{
                 dateRec = recupMoodDate(DATE_MEM_MOOD);
                 moodRec = recupMoodMood(MOOD_MEM_MOOD);
                 noteRec = recupMoodNote(NOTE_MEM_MOOD);
-                System.out.println("recup memoire");
             }
-            System.out.println("difference date "+(now.get(Calendar.DATE)-moodDate.get(Calendar.DATE)));
+
             // put new mood in dayly SharedPreferences
             if (now.get(Calendar.DATE)-moodDate.get(Calendar.DATE)==0){
-                daylyMoodPref.edit().putLong(DATE_CURRENT_MOOD,now.getTime().getTime()).apply();
-                daylyMoodPref.edit().putInt(MOOD_CURRENT_MOOD,mood).apply();
-                daylyMoodPref.edit().putString(NOTE_CURRENT_MOOD,dayNote).apply();
-                System.out.println("recup memoire journée");
+                daylyRecordMood();
             }
             else{
                 dateRec.add(daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0));
@@ -207,10 +236,6 @@ public class MainActivity extends AppCompatActivity{
         list = dateGson.fromJson(getGson, list.getClass());
         for (Object aList : list) {
             long nb = Math.round((double)aList);
-            DateFormat shortDateFormat = DateFormat.getDateTimeInstance(
-                    DateFormat.SHORT,
-                    DateFormat.SHORT);
-            System.out.println(shortDateFormat.format(nb));
             listreturn.add(nb);
         }
         return listreturn;}
@@ -224,7 +249,6 @@ public class MainActivity extends AppCompatActivity{
         list = dateGson.fromJson(getGson, list.getClass());
         for (Object aList : list) {
             int nb = (int)((double)aList);
-            System.out.println(aList+"  "+nb);
             listreturn.add(nb);
         }
         return listreturn;
@@ -250,26 +274,39 @@ public class MainActivity extends AppCompatActivity{
         Gson dateGson = new Gson();
         Gson moodGson = new Gson();
         Gson noteGson = new Gson();
-        Calendar moodDate2 = Calendar.getInstance();
-        moodDate2.set(18,4,17);
-        //dateRec.add(moodDate2.getTime().getTime());
-        dateRec.add(1526535900000L);
+
+        dateRec.add(1526266080000L);
+        moodRec.add(1);
+        noteRec.add("14/05");
+
+        dateRec.add(1526352480000L);
+        moodRec.add(2);
+        noteRec.add("15/05");
+
+        dateRec.add(1526438880000L);
         moodRec.add(3);
         noteRec.add("");
-        moodDate2.set(18,4,18);
-        //dateRec.add(moodDate2.getTime().getTime());
+
+        dateRec.add(1526535900000L);
+        moodRec.add(4);
+        noteRec.add("17/05");
+
         dateRec.add(1526622300000L);
         moodRec.add(1);
-        noteRec.add("zecvh");
-        moodDate2.set(18,4,19);
-        //dateRec.add(moodDate2.getTime().getTime());
+        noteRec.add("");
+
         dateRec.add(1526708700000L);
-        moodRec.add(4);
-        noteRec.add("essai");
+        moodRec.add(2);
+        noteRec.add("Brad Pitt a accepté votre invitation à venir manger des chips");
+
         dateRec.add(1526798700000L);
         moodRec.add(0);
         noteRec.add("");
-        System.out.println("rec taille "+dateRec.size());
+
+        dateRec.add(1526870880000L);
+        moodRec.add(3);
+        noteRec.add("hier");
+
         moodPref.edit().putString(DATE_MEM_MOOD,dateGson.toJson(dateRec)).apply();
         moodPref.edit().putString(MOOD_MEM_MOOD,moodGson.toJson(moodRec)).apply();
         moodPref.edit().putString(NOTE_MEM_MOOD,noteGson.toJson(noteRec)).apply();
