@@ -19,20 +19,19 @@ import com.eric_b.moodtracker.R;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-
+import java.text.DateFormat;
 
 public class MainActivity extends AppCompatActivity{
 
-
     // declaration of mood variables
 
-    SharedPreferences daylyMoodPref;
-    SharedPreferences moodPref;
     public static final String BUNDLE_CURRENT_MOOD = "MOOD";
+    SharedPreferences daylyMoodPref;
     public static final String DATE_CURRENT_MOOD = "DATE_CURRENT_MOOD";
     public static final String MOOD_CURRENT_MOOD = "MOOD_CURRENT_MOOD";
     public static final String NOTE_CURRENT_MOOD = "NOTE_CURRENT_MOOD";
+    SharedPreferences moodPref;
+    public static final String PREF_MEM_MOOD = "NAME_MEM_MOOD";
     public static final String DATE_MEM_MOOD = "DATE_MEM_MOOD";
     public static final String MOOD_MEM_MOOD = "MOOD_MEM_MOOD";
     public static final String NOTE_MEM_MOOD = "NOTE_MEM_MOOD";
@@ -47,8 +46,7 @@ public class MainActivity extends AppCompatActivity{
         ImageButton noteButton = findViewById(R.id.buttonAddNote);
         ImageButton historyButton = findViewById(R.id.buttonHistory);
         daylyMoodPref = getPreferences(MODE_PRIVATE);
-        moodPref = getPreferences(MODE_PRIVATE);
-
+        moodPref = getSharedPreferences(PREF_MEM_MOOD, MODE_PRIVATE);
         if (savedInstanceState != null) {
             mood = savedInstanceState.getInt(BUNDLE_CURRENT_MOOD);
         } else {
@@ -147,6 +145,7 @@ public class MainActivity extends AppCompatActivity{
                         public void onClick(DialogInterface dialog, int which) {
                             EditText txt = alertDialogView.findViewById(R.id.EditTextnote);
                             dayNote = txt.getText().toString();
+                            System.out.println("dayNote "+dayNote);
                             recMood();
                         }
                     })
@@ -155,8 +154,7 @@ public class MainActivity extends AppCompatActivity{
         }
 
         private void recMood(){
-            daylyMoodPref = getPreferences(MODE_PRIVATE);
-            //moodPref = getPreferences(MODE_PRIVATE);
+            remplir();
             Calendar now = Calendar.getInstance();
             Calendar moodDate = Calendar.getInstance();
             ArrayList<Long> dateRec = new ArrayList<>();
@@ -168,6 +166,7 @@ public class MainActivity extends AppCompatActivity{
 
             if (daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0) != 0) {
                 moodDate.setTimeInMillis(daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0));
+                System.out.println("moodDate "+ moodDate.getTime());
             }
 
             // Recover Arraylist of Mood memory
@@ -175,13 +174,15 @@ public class MainActivity extends AppCompatActivity{
                 dateRec = recupMoodDate(DATE_MEM_MOOD);
                 moodRec = recupMoodMood(MOOD_MEM_MOOD);
                 noteRec = recupMoodNote(NOTE_MEM_MOOD);
+                System.out.println("recup memoire");
             }
-
+            System.out.println("difference date "+(now.get(Calendar.DATE)-moodDate.get(Calendar.DATE)));
             // put new mood in dayly SharedPreferences
             if (now.get(Calendar.DATE)-moodDate.get(Calendar.DATE)==0){
                 daylyMoodPref.edit().putLong(DATE_CURRENT_MOOD,now.getTime().getTime()).apply();
                 daylyMoodPref.edit().putInt(MOOD_CURRENT_MOOD,mood).apply();
                 daylyMoodPref.edit().putString(NOTE_CURRENT_MOOD,dayNote).apply();
+                System.out.println("recup memoire journée");
             }
             else{
                 dateRec.add(daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0));
@@ -190,12 +191,14 @@ public class MainActivity extends AppCompatActivity{
                 moodPref.edit().putString(DATE_MEM_MOOD,dateGson.toJson(dateRec)).apply();
                 moodPref.edit().putString(MOOD_MEM_MOOD,moodGson.toJson(moodRec)).apply();
                 moodPref.edit().putString(NOTE_MEM_MOOD,noteGson.toJson(noteRec)).apply();
+                daylyMoodPref.edit().putLong(DATE_CURRENT_MOOD,now.getTime().getTime()).apply();
+                daylyMoodPref.edit().putInt(MOOD_CURRENT_MOOD,mood).apply();
+                daylyMoodPref.edit().putString(NOTE_CURRENT_MOOD,dayNote).apply();
             }
 
         }
 
     protected ArrayList<Long> recupMoodDate(String MEM_MOOD_INFO){
-        SharedPreferences moodPref = getPreferences(MODE_PRIVATE);
         Gson dateGson = new Gson();
         ArrayList list= new ArrayList<>();
         ArrayList<Long> listreturn= new ArrayList<>();
@@ -204,13 +207,15 @@ public class MainActivity extends AppCompatActivity{
         list = dateGson.fromJson(getGson, list.getClass());
         for (Object aList : list) {
             long nb = Math.round((double)aList);
-            System.out.println(aList+"  "+nb);
+            DateFormat shortDateFormat = DateFormat.getDateTimeInstance(
+                    DateFormat.SHORT,
+                    DateFormat.SHORT);
+            System.out.println(shortDateFormat.format(nb));
             listreturn.add(nb);
         }
         return listreturn;}
 
     protected ArrayList<Integer> recupMoodMood(String MEM_MOOD_INFO) {
-        SharedPreferences moodPref = getPreferences(MODE_PRIVATE);
         Gson dateGson = new Gson();
         ArrayList list = new ArrayList<>();
         ArrayList<Integer> listreturn= new ArrayList<>();
@@ -226,7 +231,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
     protected ArrayList<String> recupMoodNote(String MEM_MOOD_INFO) {
-        SharedPreferences moodPref = getPreferences(MODE_PRIVATE);
         Gson dateGson = new Gson();
         ArrayList list = new ArrayList<>();
         ArrayList<String> listreturn= new ArrayList<>();
@@ -237,6 +241,38 @@ public class MainActivity extends AppCompatActivity{
             listreturn.add((String) aList);
         }
         return listreturn;
+    }
+
+    public void remplir (){
+        ArrayList<Long> dateRec = new ArrayList<>();
+        ArrayList<Integer> moodRec = new ArrayList<>();
+        ArrayList<String> noteRec = new ArrayList<>();
+        Gson dateGson = new Gson();
+        Gson moodGson = new Gson();
+        Gson noteGson = new Gson();
+        Calendar moodDate2 = Calendar.getInstance();
+        moodDate2.set(18,4,17);
+        //dateRec.add(moodDate2.getTime().getTime());
+        dateRec.add(1526535900000L);
+        moodRec.add(3);
+        noteRec.add("");
+        moodDate2.set(18,4,18);
+        //dateRec.add(moodDate2.getTime().getTime());
+        dateRec.add(1526622300000L);
+        moodRec.add(1);
+        noteRec.add("zecvh");
+        moodDate2.set(18,4,19);
+        //dateRec.add(moodDate2.getTime().getTime());
+        dateRec.add(1526708700000L);
+        moodRec.add(4);
+        noteRec.add("essai");
+        dateRec.add(1526798700000L);
+        moodRec.add(0);
+        noteRec.add("");
+        System.out.println("rec taille "+dateRec.size());
+        moodPref.edit().putString(DATE_MEM_MOOD,dateGson.toJson(dateRec)).apply();
+        moodPref.edit().putString(MOOD_MEM_MOOD,moodGson.toJson(moodRec)).apply();
+        moodPref.edit().putString(NOTE_MEM_MOOD,noteGson.toJson(noteRec)).apply();
     }
 
 }

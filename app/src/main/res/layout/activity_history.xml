@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".Controllers.HistoryActivity"
     android:background="@color/light_grey"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/histroryScreen">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -27,11 +28,12 @@
             android:id="@+id/day7ImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="Note_Button"
+            android:contentDescription="Note Button"
             android:background="@drawable/ic_comment_black_48px"
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
-            android:layout_gravity="end|center_vertical"/>
+            android:layout_gravity="end|center_vertical"
+            android:visibility="invisible"/>
     </FrameLayout>
 
     <FrameLayout
@@ -47,9 +49,7 @@
             android:paddingEnd="7dp"
             android:paddingLeft="7dp"
             android:paddingTop="5dp"
-            android:background="@color/banana_yellow"
             android:textStyle="bold"
-            android:text="Il y a 6 jours"
             />
         <ImageButton
             android:id="@+id/day6ImageButton"
@@ -59,7 +59,8 @@
             android:background="@drawable/ic_comment_black_48px"
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
-            android:layout_gravity="end|center_vertical"/>
+            android:layout_gravity="end|center_vertical"
+            android:visibility="invisible"/>
     </FrameLayout>
 
     <FrameLayout
@@ -75,9 +76,7 @@
             android:paddingEnd="7dp"
             android:paddingLeft="7dp"
             android:paddingTop="5dp"
-            android:background="@color/banana_yellow"
             android:textStyle="bold"
-            android:text="Il y a 5 jours"
             />
         <ImageButton
             android:id="@+id/day5ImageButton"
@@ -87,7 +86,8 @@
             android:background="@drawable/ic_comment_black_48px"
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
-            android:layout_gravity="end|center_vertical"/>
+            android:layout_gravity="end|center_vertical"
+            android:visibility="invisible"/>
     </FrameLayout>
 
     <FrameLayout
@@ -103,9 +103,7 @@
             android:paddingEnd="7dp"
             android:paddingLeft="7dp"
             android:paddingTop="5dp"
-            android:background="@color/banana_yellow"
             android:textStyle="bold"
-            android:text="Il y a 4 jours"
             />
         <ImageButton
             android:id="@+id/day4ImageButton"
@@ -115,7 +113,8 @@
             android:background="@drawable/ic_comment_black_48px"
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
-            android:layout_gravity="end|center_vertical"/>
+            android:layout_gravity="end|center_vertical"
+            android:visibility="invisible"/>
     </FrameLayout>
 
     <FrameLayout
@@ -131,9 +130,7 @@
             android:paddingEnd="7dp"
             android:paddingLeft="7dp"
             android:paddingTop="5dp"
-            android:background="@color/banana_yellow"
             android:textStyle="bold"
-            android:text="Il y a 3 jours"
             />
         <ImageButton
             android:id="@+id/day3ImageButton"
@@ -143,7 +140,8 @@
             android:background="@drawable/ic_comment_black_48px"
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
-            android:layout_gravity="end|center_vertical"/>
+            android:layout_gravity="end|center_vertical"
+            android:visibility="invisible"/>
     </FrameLayout>
 
     <FrameLayout
@@ -159,9 +157,7 @@
             android:paddingEnd="7dp"
             android:paddingLeft="7dp"
             android:paddingTop="5dp"
-            android:background="@color/banana_yellow"
             android:textStyle="bold"
-            android:text="Avant hier"
             />
         <ImageButton
             android:id="@+id/day2ImageButton"
@@ -171,7 +167,8 @@
             android:background="@drawable/ic_comment_black_48px"
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
-            android:layout_gravity="end|center_vertical"/>
+            android:layout_gravity="end|center_vertical"
+            android:visibility="invisible"/>
     </FrameLayout>
 
     <FrameLayout
@@ -187,9 +184,7 @@
             android:paddingEnd="7dp"
             android:paddingLeft="7dp"
             android:paddingTop="5dp"
-            android:background="@color/banana_yellow"
             android:textStyle="bold"
-            android:text="Hier"
             />
         <ImageButton
             android:id="@+id/day1ImageButton"
@@ -199,6 +194,7 @@
             android:background="@drawable/ic_comment_black_48px"
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
-            android:layout_gravity="end|center_vertical"/>
+            android:layout_gravity="end|center_vertical"
+            android:visibility="invisible"/>
     </FrameLayout>
 </LinearLayout>
