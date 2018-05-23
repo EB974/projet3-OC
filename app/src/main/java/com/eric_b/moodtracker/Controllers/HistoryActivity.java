@@ -92,7 +92,7 @@ public class HistoryActivity extends AppCompatActivity{
             TextView currentTxtView = findViewById(txtViewName[viewPosition]);
             currentTxtView.setText(txt);
             currentTxtView.setWidth(Math.round(sizeScreen/100*coef*(moodRec.get(i)+1)));
-            bckColor.SetScreen(moodRec.get(i));
+            bckColor.SetMood(moodRec.get(i));
             currentTxtView.setBackgroundResource(bckColor.GetBkground());
 
             if (noteRec.get(i).length()>0){
