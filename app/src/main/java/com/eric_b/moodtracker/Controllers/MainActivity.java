@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity{
             dayNote = savedInstanceState.getString(BUNDLE_CURRENT_NOTE);
         } else {
             LoadRecordedMood();
+            recordOldMood();
         }
         MoodChange(mood,false);
 
@@ -175,13 +176,11 @@ public class MainActivity extends AppCompatActivity{
         if (daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0) != 0) {
             moodDate.setTimeInMillis(daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0));
         }
-        if (now.get(Calendar.DATE)-moodDate.get(Calendar.DATE)==0) {
+        if (now.get(Calendar.DATE) == moodDate.get(Calendar.DATE)) {
             mood = daylyMoodPref.getInt(MOOD_CURRENT_MOOD, 3);
             dayNote = daylyMoodPref.getString(NOTE_CURRENT_MOOD, null);
         }else{
-            recordMood();
             mood = 3;
-
         }
     }
 
@@ -194,27 +193,34 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-        private void recordMood(){
-            ArrayList<Long> dateRec = new ArrayList<>();
-            ArrayList<Integer> moodRec = new ArrayList<>();
-            ArrayList<String> noteRec = new ArrayList<>();
-            Gson dateGson = new Gson();
-            Gson moodGson = new Gson();
-            Gson noteGson = new Gson();
+        private void recordOldMood(){
+            Calendar now = Calendar.getInstance();
+            Calendar moodDate = Calendar.getInstance();
+            if (daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0) != 0) {
+                moodDate.setTimeInMillis(daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0));
+                if (now.get(Calendar.DATE) != moodDate.get(Calendar.DATE)) {
+                    ArrayList<Long> dateRec = new ArrayList<>();
+                    ArrayList<Integer> moodRec = new ArrayList<>();
+                    ArrayList<String> noteRec = new ArrayList<>();
+                    Gson dateGson = new Gson();
+                    Gson moodGson = new Gson();
+                    Gson noteGson = new Gson();
 
-            // Recover Arraylist of Mood memory
-            if (moodPref.getString(DATE_MEM_MOOD, null) != null) {
-                dateRec = recupMoodDate(DATE_MEM_MOOD);
-                moodRec = recupMoodMood(MOOD_MEM_MOOD);
-                noteRec = recupMoodNote(NOTE_MEM_MOOD);
+                    // Recover Arraylist of Mood memory
+                    if (moodPref.getString(DATE_MEM_MOOD, null) != null) {
+                        dateRec = recupMoodDate(DATE_MEM_MOOD);
+                        moodRec = recupMoodMood(MOOD_MEM_MOOD);
+                        noteRec = recupMoodNote(NOTE_MEM_MOOD);
+                    }
+
+                    dateRec.add(daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0));
+                    moodRec.add(daylyMoodPref.getInt(MOOD_CURRENT_MOOD, 0));
+                    noteRec.add(daylyMoodPref.getString(NOTE_CURRENT_MOOD, null));
+                    moodPref.edit().putString(DATE_MEM_MOOD, dateGson.toJson(dateRec)).apply();
+                    moodPref.edit().putString(MOOD_MEM_MOOD, moodGson.toJson(moodRec)).apply();
+                    moodPref.edit().putString(NOTE_MEM_MOOD, noteGson.toJson(noteRec)).apply();
+                }
             }
-
-                dateRec.add(daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0));
-                moodRec.add(daylyMoodPref.getInt(MOOD_CURRENT_MOOD, 0));
-                noteRec.add(daylyMoodPref.getString(NOTE_CURRENT_MOOD, null));
-                moodPref.edit().putString(DATE_MEM_MOOD,dateGson.toJson(dateRec)).apply();
-                moodPref.edit().putString(MOOD_MEM_MOOD,moodGson.toJson(moodRec)).apply();
-                moodPref.edit().putString(NOTE_MEM_MOOD,noteGson.toJson(noteRec)).apply();
         }
 
     protected ArrayList<Long> recupMoodDate(String MEM_MOOD_INFO){
