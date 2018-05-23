@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity{
             image.SetScreen(screen);
             moodImage.setImageResource(image.GetImage());
             layout.setBackgroundResource(image.GetBkground());
+            //daylyRecordMood();
             mood = screen;
         }
 
@@ -153,17 +154,13 @@ public class MainActivity extends AppCompatActivity{
                     public void onClick(DialogInterface dialog, int which) {
                         EditText inputNote = boxView.findViewById(R.id.EditTextnote);
                         dayNote = inputNote.getText().toString();
-                        recordMood();
+                        daylyRecordMood();
                     }
                 })
                 .create()
                 .show();
         }
 
-    private void recoverMood(){
-
-
-    }
 
     private void LoadRecordedMood(){
         Calendar now = Calendar.getInstance();
@@ -172,9 +169,11 @@ public class MainActivity extends AppCompatActivity{
             moodDate.setTimeInMillis(daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0));
         }
         if (now.get(Calendar.DATE)-moodDate.get(Calendar.DATE)==0) {
-            mood = daylyMoodPref.getInt(MOOD_CURRENT_MOOD, 0);
+            mood = daylyMoodPref.getInt(MOOD_CURRENT_MOOD, 3);
         }else{
+            recordMood();
             mood = 3;
+
         }
     }
 
@@ -188,19 +187,12 @@ public class MainActivity extends AppCompatActivity{
     }
 
         private void recordMood(){
-            //remplir();
-            Calendar now = Calendar.getInstance();
-            Calendar moodDate = Calendar.getInstance();
             ArrayList<Long> dateRec = new ArrayList<>();
             ArrayList<Integer> moodRec = new ArrayList<>();
             ArrayList<String> noteRec = new ArrayList<>();
             Gson dateGson = new Gson();
             Gson moodGson = new Gson();
             Gson noteGson = new Gson();
-
-            if (daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0) != 0) {
-                moodDate.setTimeInMillis(daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0));
-            }
 
             // Recover Arraylist of Mood memory
             if (moodPref.getString(DATE_MEM_MOOD, null) != null) {
@@ -209,21 +201,12 @@ public class MainActivity extends AppCompatActivity{
                 noteRec = recupMoodNote(NOTE_MEM_MOOD);
             }
 
-            // put new mood in dayly SharedPreferences
-            if (now.get(Calendar.DATE)-moodDate.get(Calendar.DATE)==0){
-                daylyRecordMood();
-            }
-            else{
                 dateRec.add(daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0));
                 moodRec.add(daylyMoodPref.getInt(MOOD_CURRENT_MOOD, 0));
                 noteRec.add(daylyMoodPref.getString(NOTE_CURRENT_MOOD, null));
                 moodPref.edit().putString(DATE_MEM_MOOD,dateGson.toJson(dateRec)).apply();
                 moodPref.edit().putString(MOOD_MEM_MOOD,moodGson.toJson(moodRec)).apply();
                 moodPref.edit().putString(NOTE_MEM_MOOD,noteGson.toJson(noteRec)).apply();
-                daylyMoodPref.edit().putLong(DATE_CURRENT_MOOD,now.getTime().getTime()).apply();
-                daylyMoodPref.edit().putInt(MOOD_CURRENT_MOOD,mood).apply();
-                daylyMoodPref.edit().putString(NOTE_CURRENT_MOOD,dayNote).apply();
-            }
 
         }
 
@@ -266,51 +249,5 @@ public class MainActivity extends AppCompatActivity{
         }
         return listreturn;
     }
-
-    public void remplir (){
-        ArrayList<Long> dateRec = new ArrayList<>();
-        ArrayList<Integer> moodRec = new ArrayList<>();
-        ArrayList<String> noteRec = new ArrayList<>();
-        Gson dateGson = new Gson();
-        Gson moodGson = new Gson();
-        Gson noteGson = new Gson();
-
-        dateRec.add(1526266080000L);
-        moodRec.add(1);
-        noteRec.add("14/05");
-
-        dateRec.add(1526352480000L);
-        moodRec.add(2);
-        noteRec.add("15/05");
-
-        dateRec.add(1526438880000L);
-        moodRec.add(3);
-        noteRec.add("");
-
-        dateRec.add(1526535900000L);
-        moodRec.add(4);
-        noteRec.add("17/05");
-
-        dateRec.add(1526622300000L);
-        moodRec.add(1);
-        noteRec.add("");
-
-        dateRec.add(1526708700000L);
-        moodRec.add(2);
-        noteRec.add("Brad Pitt a accepté votre invitation à venir manger des chips");
-
-        dateRec.add(1526798700000L);
-        moodRec.add(0);
-        noteRec.add("");
-
-        dateRec.add(1526870880000L);
-        moodRec.add(3);
-        noteRec.add("hier");
-
-        moodPref.edit().putString(DATE_MEM_MOOD,dateGson.toJson(dateRec)).apply();
-        moodPref.edit().putString(MOOD_MEM_MOOD,moodGson.toJson(moodRec)).apply();
-        moodPref.edit().putString(NOTE_MEM_MOOD,noteGson.toJson(noteRec)).apply();
-    }
-
 }
 
