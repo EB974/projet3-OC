@@ -49,6 +49,8 @@ public class HistoryActivity extends AppCompatActivity{
 
         int orientation = getResources().getConfiguration().orientation;
         int sizeScreen,coef;
+        int viewPosition = 0;
+        int rectifiedPosition;
         if (orientation==1) {
             sizeScreen= metrics.widthPixels;
             coef = 25;
@@ -62,15 +64,17 @@ public class HistoryActivity extends AppCompatActivity{
         int sizeListMood = dateRec.size()-1;
         if (sizeListMood-6 >=0){
             min = sizeListMood-6;
+            rectifiedPosition = 0;
         }else{
             min = 0;
+            rectifiedPosition = 6-sizeListMood;
         }
         int [] txtViewName = {R.id.day1Text,R.id.day2Text,R.id.day3Text,R.id.day4Text,R.id.day5Text,R.id.day6Text,R.id.day7Text};
         int [] buttonViewName = {R.id.day1ImageButton,R.id.day2ImageButton,R.id.day3ImageButton,R.id.day4ImageButton,R.id.day5ImageButton,R.id.day6ImageButton,R.id.day7ImageButton};
         MoodObject bckColor = new MoodObject();
         Calendar dateDay =  Calendar.getInstance();
         Calendar dateMem =  Calendar.getInstance();
-        int viewPosition = 0;
+
         for(int i=min; i <=sizeListMood ; i++){
             dateMem.setTimeInMillis(dateRec.get(i));
             int diffDate = dateDay.get(Calendar.DATE)-dateMem.get(Calendar.DATE);
@@ -85,15 +89,14 @@ public class HistoryActivity extends AppCompatActivity{
                 default : txt= "Il y a "+Integer.toString(diffDate)+" jours";
             }
             if (diffDate > 7) txt = "Il y a plus d'une semaine";
-
-            TextView currentTxtView = findViewById(txtViewName[6 - viewPosition]);
+            TextView currentTxtView = findViewById(txtViewName[rectifiedPosition+viewPosition]);
             currentTxtView.setText(txt);
             currentTxtView.setWidth(Math.round(sizeScreen/100*coef*(moodRec.get(i)+1)));
             bckColor.SetMood(moodRec.get(i));
             currentTxtView.setBackgroundResource(bckColor.GetBkground());
 
             if (noteRec.get(i)!=null){
-                currentButton = findViewById(buttonViewName[6 - viewPosition]);
+                currentButton = findViewById(buttonViewName[rectifiedPosition+viewPosition]);
                 currentButton.setVisibility(View.VISIBLE);
             }
             viewPosition++;
