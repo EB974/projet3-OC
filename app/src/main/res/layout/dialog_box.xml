@@ -18,7 +18,7 @@
         android:textColor="@color/colorPrimary"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
-        android:hint="Commentaire"
+        android:hint="@string/Comment"
         tools:ignore="LabelFor"
         />
 

@@ -17,9 +17,9 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class HistoryActivity extends AppCompatActivity{
+public class HistoryActivity extends AppCompatActivity{ //shows the last 7 moods recorded
 
-    // declaration of mood variables
+    // declaration of moods variables
     SharedPreferences moodPref;
     public static final String PREF_MEM_MOOD = "NAME_MEM_MOOD";
     public static final String DATE_MEM_MOOD = "DATE_MEM_MOOD";
@@ -45,7 +45,7 @@ public class HistoryActivity extends AppCompatActivity{
         ImageButton noteButton7Day = findViewById(R.id.day7ImageButton);
 
         DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        getWindowManager().getDefaultDisplay().getMetrics(metrics); //recovering the width of the screen
 
         int orientation = getResources().getConfiguration().orientation;
         int sizeScreen,coef;
@@ -75,7 +75,7 @@ public class HistoryActivity extends AppCompatActivity{
         Calendar dateDay =  Calendar.getInstance();
         Calendar dateMem =  Calendar.getInstance();
 
-        for(int i=min; i <=sizeListMood ; i++){
+        for(int i=min; i <=sizeListMood ; i++){ //displays moods
             dateMem.setTimeInMillis(dateRec.get(i));
             int diffDate = dateDay.get(Calendar.DATE)-dateMem.get(Calendar.DATE);
             String txt;
@@ -102,6 +102,8 @@ public class HistoryActivity extends AppCompatActivity{
             viewPosition++;
 
         }
+
+        // Display button comment
         noteButton1Day.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,7 +161,7 @@ public class HistoryActivity extends AppCompatActivity{
         });
     }
 
-    private void recoverMemMood(){
+    private void recoverMemMood(){ //Recover the moods memory
 
         // Recover Arraylist of Mood memory
         if (moodPref.getString(DATE_MEM_MOOD, null) != null) {
@@ -172,7 +174,7 @@ public class HistoryActivity extends AppCompatActivity{
     }
 
 
-    protected ArrayList<Long> recupMoodDate(String MEM_MOOD_INFO){
+    protected ArrayList<Long> recupMoodDate(String MEM_MOOD_INFO){  //Recover moods date recorded with Gson lib
 
         Gson dateGson = new Gson();
         ArrayList list= new ArrayList<>();
@@ -186,7 +188,7 @@ public class HistoryActivity extends AppCompatActivity{
         }
         return listreturn;}
 
-    protected ArrayList<Integer> recupMoodMood(String MEM_MOOD_INFO) {
+    protected ArrayList<Integer> recupMoodMood(String MEM_MOOD_INFO) {  //Recover moods recorded with Gson lib
 
         Gson dateGson = new Gson();
         ArrayList list = new ArrayList<>();
@@ -201,7 +203,7 @@ public class HistoryActivity extends AppCompatActivity{
         return listreturn;
     }
 
-    protected ArrayList<String> recupMoodNote(String MEM_MOOD_INFO) {
+    protected ArrayList<String> recupMoodNote(String MEM_MOOD_INFO) {  //Recover moods comment recorded with Gson lib
         //SharedPreferences moodPref = getPreferences(MODE_PRIVATE);
         Gson dateGson = new Gson();
         ArrayList list = new ArrayList<>();

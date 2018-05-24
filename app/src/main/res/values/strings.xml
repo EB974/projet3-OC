@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MoodTracker</string>
+    <string name="Note_Button">Note Button</string>
+    <string name="Comment">Comment</string>
+    <string name="Mood_Image">Mood Image</string>
+    <string name="Add_note">Add note</string>
+    <string name="History">History</string>
+    History
 </resources>

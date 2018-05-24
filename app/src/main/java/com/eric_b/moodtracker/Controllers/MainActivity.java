@@ -54,10 +54,10 @@ public class MainActivity extends AppCompatActivity{
             mood = savedInstanceState.getInt(BUNDLE_CURRENT_MOOD);
             dayNote = savedInstanceState.getString(BUNDLE_CURRENT_NOTE);
         } else {
-            LoadRecordedMood();
-            recordOldMood();
+            LoadRecordedMood();  // recover daily mood
+            recordOldMood();     // record the mood of the day before
         }
-        MoodChange(mood,false);
+        MoodChange(mood,false);  //display mood
 
         final View currentView;
         currentView = findViewById(R.id.moodScreen);
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity{
                                 Y1 = (int) event.getY();
                                 return true;
 
-                            case (MotionEvent.ACTION_UP):
+                            case (MotionEvent.ACTION_UP):  //vertical slide detection
                                 myView.performClick();
                                 Y2 = (int) event.getY();
                                 deltaY = Y1 - Y2;
@@ -124,14 +124,13 @@ public class MainActivity extends AppCompatActivity{
         daylyRecordMood();
     }
 
-    private void MoodChange (int screen, boolean noteChange){
+    private void MoodChange (int screen, boolean noteChange){  //display mood
             RelativeLayout layout = findViewById(R.id.moodScreen);
             MoodObject image = new MoodObject();
             ImageView moodImage = findViewById(R.id.moodImage);
             image.SetMood(screen);
             moodImage.setImageResource(image.GetImage());
             layout.setBackgroundResource(image.GetBkground());
-            //daylyRecordMood();
             mood = screen;
             if (noteChange) dayNote = null;
         }
@@ -143,7 +142,7 @@ public class MainActivity extends AppCompatActivity{
             super.onSaveInstanceState(outState);
         }
 
-        private void note () {
+        private void note () {  //put comment in dayNote variable
             ViewGroup viewG = new ViewGroup(this) {
                 @Override
                 protected void onLayout(boolean unchanged, int l, int t, int r, int b) {
@@ -162,7 +161,6 @@ public class MainActivity extends AppCompatActivity{
                     public void onClick(DialogInterface dialog, int which) {
                         EditText inputNote = boxView.findViewById(R.id.EditTextnote);
                         dayNote = inputNote.getText().toString();
-                        //daylyRecordMood();
                     }
                 })
                 .create()
@@ -170,7 +168,7 @@ public class MainActivity extends AppCompatActivity{
         }
 
 
-    private void LoadRecordedMood(){
+    private void LoadRecordedMood(){  // recover daily mood
         Calendar now = Calendar.getInstance();
         Calendar moodDate = Calendar.getInstance();
         if (daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0) != 0) {
@@ -185,7 +183,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    private void daylyRecordMood(){
+    private void daylyRecordMood(){  //record daily mood
         Calendar now = Calendar.getInstance();
             daylyMoodPref.edit().putLong(DATE_CURRENT_MOOD, now.getTime().getTime()).apply();
             daylyMoodPref.edit().putInt(MOOD_CURRENT_MOOD, mood).apply();
@@ -193,7 +191,7 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-        private void recordOldMood(){
+        private void recordOldMood(){   // record the mood of the day before
             Calendar now = Calendar.getInstance();
             Calendar moodDate = Calendar.getInstance();
             if (daylyMoodPref.getLong(DATE_CURRENT_MOOD, 0) != 0) {
@@ -223,7 +221,7 @@ public class MainActivity extends AppCompatActivity{
             }
         }
 
-    protected ArrayList<Long> recupMoodDate(String MEM_MOOD_INFO){
+    protected ArrayList<Long> recupMoodDate(String MEM_MOOD_INFO){  //Recover moods date recorded with Gson lib
         Gson dateGson = new Gson();
         ArrayList list= new ArrayList<>();
         ArrayList<Long> listreturn= new ArrayList<>();
@@ -236,7 +234,7 @@ public class MainActivity extends AppCompatActivity{
         }
         return listreturn;}
 
-    protected ArrayList<Integer> recupMoodMood(String MEM_MOOD_INFO) {
+    protected ArrayList<Integer> recupMoodMood(String MEM_MOOD_INFO) {  //Recover moods recorded with Gson lib
         Gson dateGson = new Gson();
         ArrayList list = new ArrayList<>();
         ArrayList<Integer> listreturn= new ArrayList<>();
@@ -250,7 +248,7 @@ public class MainActivity extends AppCompatActivity{
         return listreturn;
     }
 
-    protected ArrayList<String> recupMoodNote(String MEM_MOOD_INFO) {
+    protected ArrayList<String> recupMoodNote(String MEM_MOOD_INFO) {  //Recover moods comment recorded with Gson lib
         Gson dateGson = new Gson();
         ArrayList list = new ArrayList<>();
         ArrayList<String> listreturn= new ArrayList<>();
@@ -265,7 +263,7 @@ public class MainActivity extends AppCompatActivity{
 
     protected MediaPlayer mPlayer = null;
 
-    private void sound (int soundMood){
+    private void sound (int soundMood){   //play sound
         MoodObject sound = new MoodObject();
         sound.SetMood(soundMood);
         if(mPlayer != null) {
