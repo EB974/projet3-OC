@@ -57,9 +57,6 @@ public class HistoryActivity extends AppCompatActivity{
             sizeScreen = metrics.widthPixels;
             coef = 20;
         }
-
-
-
         int min;
         recoverMemMood();
         int sizeListMood = dateRec.size()-1;
@@ -89,14 +86,14 @@ public class HistoryActivity extends AppCompatActivity{
             }
             if (diffDate > 7) txt = "Il y a plus d'une semaine";
 
-            TextView currentTxtView = findViewById(txtViewName[viewPosition]);
+            TextView currentTxtView = findViewById(txtViewName[6 - viewPosition]);
             currentTxtView.setText(txt);
             currentTxtView.setWidth(Math.round(sizeScreen/100*coef*(moodRec.get(i)+1)));
             bckColor.SetMood(moodRec.get(i));
             currentTxtView.setBackgroundResource(bckColor.GetBkground());
 
-            if (noteRec.get(i).length()>0){
-                currentButton = findViewById(buttonViewName[viewPosition]);
+            if (noteRec.get(i)!=null){
+                currentButton = findViewById(buttonViewName[6 - viewPosition]);
                 currentButton.setVisibility(View.VISIBLE);
             }
             viewPosition++;

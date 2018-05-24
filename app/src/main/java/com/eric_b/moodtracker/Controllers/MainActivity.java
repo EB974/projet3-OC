@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity{
             layout.setBackgroundResource(image.GetBkground());
             //daylyRecordMood();
             mood = screen;
-            if (noteChange) dayNote = "";
+            if (noteChange) dayNote = null;
         }
 
         @Override
