@@ -5,7 +5,7 @@ import com.eric_b.moodtracker.R;
 public class MoodObject {
 
     private int[] bkground = {R.color.faded_red,R.color.warm_grey,R.color.cornflower_blue_65,R.color.light_sage,R.color.banana_yellow};
-    private int[] smeily = {R.drawable.smiley_sad,R.drawable.smiley_disappointed,R.drawable.smiley_normal,R.drawable.smiley_happy,R.drawable.smiley_super_happy};
+    private int[] smiley = {R.drawable.smiley_sad,R.drawable.smiley_disappointed,R.drawable.smiley_normal,R.drawable.smiley_happy,R.drawable.smiley_super_happy};
     private int[] sound = new int[]{R.raw.sd0, R.raw.sd1, R.raw.sd2, R.raw.sd3, R.raw.sd4};
     private int screen;
 
@@ -14,7 +14,7 @@ public class MoodObject {
     }
 
     public int GetImage(){
-        return smeily[screen];
+        return smiley[screen];
     }
 
     public int GetBkground() {

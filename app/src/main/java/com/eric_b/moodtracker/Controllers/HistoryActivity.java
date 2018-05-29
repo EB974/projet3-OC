@@ -165,22 +165,23 @@ public class HistoryActivity extends AppCompatActivity{ //shows the last 7 moods
 
         // Recover Arraylist of Mood memory
         if (moodPref.getString(DATE_MEM_MOOD, null) != null) {
-            dateRec = recupMoodDate(DATE_MEM_MOOD);
-            moodRec = recupMoodMood(MOOD_MEM_MOOD);
-            noteRec = recupMoodNote(NOTE_MEM_MOOD);
+            dateRec = recupMoodDate();
+            moodRec = recupMoodMood();
+            noteRec = recupMoodNote();
+
         }
 
 
     }
 
 
-    protected ArrayList<Long> recupMoodDate(String MEM_MOOD_INFO){  //Recover moods date recorded with Gson lib
+    private ArrayList<Long> recupMoodDate(){  //Recover moods date recorded with Gson lib
 
         Gson dateGson = new Gson();
         ArrayList list= new ArrayList<>();
         ArrayList<Long> listreturn= new ArrayList<>();
         String getGson;
-        getGson = moodPref.getString(MEM_MOOD_INFO, null);
+        getGson = moodPref.getString(DATE_MEM_MOOD, null);
         list = dateGson.fromJson(getGson, list.getClass());
         for (Object aList : list) {
             long nb = Math.round((double)aList);
@@ -188,13 +189,13 @@ public class HistoryActivity extends AppCompatActivity{ //shows the last 7 moods
         }
         return listreturn;}
 
-    protected ArrayList<Integer> recupMoodMood(String MEM_MOOD_INFO) {  //Recover moods recorded with Gson lib
+    private ArrayList<Integer> recupMoodMood() {  //Recover moods recorded with Gson lib
 
         Gson dateGson = new Gson();
         ArrayList list = new ArrayList<>();
         ArrayList<Integer> listreturn= new ArrayList<>();
         String getGson;
-        getGson = moodPref.getString(MEM_MOOD_INFO, null);
+        getGson = moodPref.getString(MOOD_MEM_MOOD, null);
         list = dateGson.fromJson(getGson, list.getClass());
         for (Object aList : list) {
             int nb = (int)((double)aList);
@@ -203,13 +204,13 @@ public class HistoryActivity extends AppCompatActivity{ //shows the last 7 moods
         return listreturn;
     }
 
-    protected ArrayList<String> recupMoodNote(String MEM_MOOD_INFO) {  //Recover moods comment recorded with Gson lib
+    private ArrayList<String> recupMoodNote() {  //Recover moods comment recorded with Gson lib
         //SharedPreferences moodPref = getPreferences(MODE_PRIVATE);
         Gson dateGson = new Gson();
         ArrayList list = new ArrayList<>();
         ArrayList<String> listreturn= new ArrayList<>();
         String getGson;
-        getGson = moodPref.getString(MEM_MOOD_INFO, null);
+        getGson = moodPref.getString(NOTE_MEM_MOOD, null);
         list = dateGson.fromJson(getGson, list.getClass());
         for (Object aList : list) {
             listreturn.add((String) aList);
