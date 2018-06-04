@@ -77,7 +77,8 @@ public class HistoryActivity extends AppCompatActivity{ //shows the last 7 moods
 
         for(int i=min; i <=sizeListMood ; i++){ //displays moods
             dateMem.setTimeInMillis(dateRec.get(i));
-            int diffDate = dateDay.get(Calendar.DATE)-dateMem.get(Calendar.DATE);
+            int diffDate = dateDay.get(Calendar.DAY_OF_YEAR)-dateMem.get(Calendar.DAY_OF_YEAR);
+            System.out.println("date01 : "+dateDay.get(Calendar.DAY_OF_YEAR)+"   date2 : "+dateMem.get(Calendar.DAY_OF_YEAR));
             String txt;
             switch (diffDate){
                 case (1) : txt = "Hier";
